@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour {
     public Text winText;
 
     private Rigidbody rb;
-    private int count; 
+    private int count;
+    private bool shouldJump; 
 
     void Start()
     {
@@ -25,7 +26,11 @@ public class PlayerController : MonoBehaviour {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        bool shouldJump = false;
+        shouldJump = true;
+        if (this.gameObject.transform.position.y > 0.5)
+        {
+            shouldJump = false; 
+        }
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         Vector3 jump = new Vector3(0,1,0);
@@ -33,7 +38,7 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(movement * speed);
 
         
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && shouldJump)
         {
             rb.AddForce(jump * jumpHeight);
         }
