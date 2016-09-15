@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement; 
 
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public float jumpHeight; 
     public Text countText;
-    public Text winText; 
+    public Text winText;
 
     private Rigidbody rb;
     private int count; 
@@ -23,9 +25,18 @@ public class PlayerController : MonoBehaviour {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
+        bool shouldJump = false;
+
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 jump = new Vector3(0,1,0);
 
         rb.AddForce(movement * speed);
+
+        
+        if (Input.GetKeyDown("space"))
+        {
+            rb.AddForce(jump * jumpHeight);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -35,6 +46,11 @@ public class PlayerController : MonoBehaviour {
             other.gameObject.SetActive(false);
             count++;
             SetCountText(); 
+        }
+
+        if (other.gameObject.CompareTag("Outside"))
+        {
+            SceneManager.LoadScene("roll-a-ball");
         }
     }
 
